@@ -1,0 +1,79 @@
+﻿
+
+
+<br />
+<div class="row">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+        <form action="/Usuario/ActualizarDatosUCliente" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label class="control-label">Perfil</label>
+                <input id="archivoInput" class="form-control" type="file" name="file" onchange="return validarExt()">
+
+                @Html.ValidationMessage("Perfil")
+                <div id="visorArchivo" style="animation-duration:">
+                    <img src="@Model.Perfil" style="width:50px;height:50px" class="img-circle" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Nombre</label>
+                <input type="text" class="form-control" name="Nombre" value="@Model.Nombre" />
+                @Html.ValidationMessage("Nombre")
+            </div>
+            <div class="form-group">
+                <label class="control-label">Apellido</label>
+                <input type="text" class="form-control" name="Apellido" value="@Model.Apellido" />
+                @Html.ValidationMessage("Apellido")
+            </div>
+            <div class="form-group">
+                <label class="control-label">DNI</label>
+                <input type="text" class="form-control" name="DNI" value="@Model.DNI" />
+                @Html.ValidationMessage("DNI")
+            </div>
+            <div class="form-group">
+                <label class="control-label">Celular</label>
+                <input type="text" class="form-control" name="Celular" value="@Model.Celular" />
+                @Html.ValidationMessage("Celular")
+            </div>
+            <div class="form-group">
+                <label class="control-label">Direccion</label>
+                <input type="text" class="form-control" name="Direccion" value="@Model.Direccion" />
+                @Html.ValidationMessage("Direccion")
+            </div>
+
+            <a href="/Usuario/VerMiCuenta" class="btn btn-default">Cancelar</a>       <button class="btn btn-primary">Confirmar cambios</button>
+        </form>
+    </div>
+    <div class="col-sm-4"></div>
+</div>
+<script>
+function validarExt()
+{
+    var archivoInput = document.getElementById('archivoInput');
+    var archivoRuta = archivoInput.value;
+    var extPermitidas = /(.jpg|.png)$/i;
+    if(!extPermitidas.exec(archivoRuta)){
+        alert('Asegurese de haber seleccionado una imagen');
+        archivoInput.value = '';
+        return false;
+    }
+
+    else
+    {
+        //PRevio del PDF
+        if (archivoInput.files && archivoInput.files[0])
+        {
+            var visor = new FileReader();
+            visor.onload = function(e)
+            {
+                document.getElementById('visorArchivo').innerHTML =
+                '<img src="' + e.target.result + '" style="width:100px;height:100px" class="img-circle" />';
+            };
+            visor.readAsDataURL(archivoInput.files[0]);
+        }
+    }
+}
+</script>
+
+

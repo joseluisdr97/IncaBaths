@@ -1,0 +1,297 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Crear Reserva</h2>
+<form action="/Reserva/CrearAdmin" method="post">
+    <div class="row container">
+        <div class="col-md-2">
+            <label class="control-label">DNI : </label>
+            <input type="text" id="dniCliente" name="DniUsuario" class="form-control" />
+        </div>
+        <div class="col-md-2">
+            <br />
+            <button id="btnBuscarCliente" class="btn btn-primary">Buscar cliente</button>
+        </div>
+        <div class="col-md-7">
+            <label class="control-label">Cliente : </label>
+            <input type="text" id="nombreCliente" class="form-control" readonly />
+        </div>
+    </div>
+    <br />
+    <hr />
+    <div class="row container">
+        <div class="col-md-3">
+            <label class="control-label">SERVICIO</label>
+
+            <select id="servicio" class="form-control">
+
+                <option value="0">-----Seleccione-----</option>
+                @foreach (var item in ViewBag.Servicios)
+            {
+                    <option value="@item.IdServicio">@item.Nombre</option>
+                }
+
+            </select>
+        </div>
+        <div id="turnos" class="col-md-4">
+
+        </div>
+        <div class="col-md-2">
+            <label class="control-label">CANTIDAD</label>
+            <input class="form-control" type="number" id="cantidad" />
+
+        </div>
+        <div class="col-md-2">
+            <br />
+            <button id="añadir" class="btn btn-danger pull-right">Añadir</button>
+        </div>
+    </div>
+    <br />
+    <div class="container">
+        <div class="row">
+
+
+            <div class="container col-sm-11 text-center">
+
+                <table id="tablaReserva" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Servicio</th>
+                            <th class="text-center">Dia</th>
+                            <th class="text-center">Hora Ingreso</th>
+                            <th class="text-center">Hora Salida</th>
+                            <th class="text-center">Precio</th>
+                            <th class="text-center">Cant.</th>
+                            <th class="text-center">Sub Total</th>
+                            <th class="text-center">Quitar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+                <div id="mostTotal">
+                    <label>Total S/ 0</label>
+
+                </div>
+
+                <button class="btn btn-success">Reservar</button>
+
+            </div>
+
+        </div>
+    </div>
+</form>
+
+
+<script>
+
+    //***************************************************************AGREGAR UN TURNO A LA RESERVA**************************************************
+    var listaTmp = [];
+    var objTmp = {};
+
+    function GetURLParameter(sParam) {//OBTENER LA URL
+        var sPageURL = window.location.search.substring(1);
+        var sURLVariables = sPageURL.split('&');
+        for (var i = 0; i < sURLVariables.length; i++) {
+            var sParameterName = sURLVariables[i].split('=');
+            if (sParameterName[0] == sParam) {
+                return sParameterName[1];
+            }
+        }
+        return null;
+    }
+    $().ready(function () {//PARA LA ALERTA CUANDO TRAE UN ATRIBUTO POR LA URL
+        var msg = GetURLParameter('msg');
+        if (msg != undefined && msg != null && msg == 1) {
+            alert('Registro exitoso');
+        }
+    });
+
+    function LlenarGrilla() {
+        var total = 0;
+        $("#tbody").empty();
+        for (var index = 0; index < listaTmp.length; index++) {
+            objTmp = listaTmp[index];
+
+            //Añadir una fila a mi tabla reserva
+            $("#tbody").append(`<tr>
+                    <td><input type="hidden" value="${objTmp.idservicio}" name="DetalleReservas[${index}].IdServicio" /><h5>${objTmp.nombreservicio}</h5></td>
+                    <td><input type="hidden" value="${objTmp.dia}"  name="DetalleReservas[${index}].Dia"/> <h5>${objTmp.dia}</h5></td>
+                    <td><input type="hidden" value="${objTmp.horainicio}" name="DetalleReservas[${index}].HoraInicio"/> <h5>${objTmp.horainicio}</h5></td>
+                    <td><input type="hidden" value="${objTmp.horafin}" name="DetalleReservas[${index}].HoraFin"/> <h5>${objTmp.horafin}</h5></td>
+                     <td><h5>${objTmp.precio}</h5></td>
+                     <td><input type="hidden" value="${objTmp.cantidad}"  type="hidden"name="DetalleReservas[${index}].Cantidad" /><h5>${objTmp.cantidad}</h5></td>
+                    <td><input type="hidden" type="text" value="${objTmp.subtotal}" name="DetalleReservas[${index}].SubTotal"/><h5>${objTmp.subtotal}</h5></td>
+                    <input type="hidden" value="${objTmp.idturno}"  type="hidden"name="DetalleReservas[${index}].IdTurno" />
+                    <td><a class ="btnQuitar btn btn-danger pull-left" href="#" data-idturno="${objTmp.idturno}" data-precioserv="${objTmp.precio}"><span class ="glyphicon glyphicon-trash"></a></td>
+                </tr>`);//Agregar mi fila a la tabla
+            total = parseFloat(total) + parseFloat(objTmp.subtotal);
+        }
+        $("#mostTotal").html(`<input type="hidden" value="${total}" name="Total"/><h3>Total S/. ${total}</h3>`);
+    }
+
+
+
+    $("#añadir").click(function (e) {
+ 
+
+        var idservicio = $("#servicio").val();
+        var idturno = $("#turno").val();
+        var paso = 1;
+        var cantidad = $("#cantidad").val();
+                    
+
+                    $.ajax({ url: "/Reserva/ObtenerDiaTurno?id=" + idturno })//*******Obtener el nombre del servicio*************
+                .success(function (resdiaT) {
+                    var dia = resdiaT;
+                    $.ajax({ url: "/Reserva/ObtenerHoraInicioTurno?id=" + idturno })//*******Obtener el nombre del servicio*************
+                .success(function (resHoraIT) {
+                    var horainicio = resHoraIT;
+                    $.ajax({ url: "/Reserva/ObtenerHoraFinTurno?id=" + idturno })//*******Obtener el nombre del servicio*************
+                .success(function (resHoraFT) {
+                    var horafin = resHoraFT;
+
+          
+
+                        //alert($this.attr("id"));//obtener el atributo id
+                        $.ajax({ url: "/Admin/ObtenerStock?id=" + idturno })//*******Obtener el nombre del servicio*************
+                            .success(function (respStock) {
+
+                                if (respStock-cantidad>=0) {
+
+
+                                    if (listaTmp.length > 0) {
+                                        for (var con = 0; con < listaTmp.length; con++) {
+                                            objTmp = listaTmp[con];
+                                            if (objTmp != null) {
+                                                if (objTmp.idturno == idturno)
+                                                { paso = 0; break; }
+                                            }
+                                        }
+                                    }
+
+                                    if (paso == 1) {
+                                        $.ajax({ url: "/Admin/ObtenerNombreServicio?id=" + idservicio })//*******Obtener el nombre del servicio*************
+                                            .success(function (respNom) {
+                                                var nombreservicio = respNom;
+                                                $.ajax({ url: "/Admin/ObtenerPrecioServicio?id=" + idservicio })//*******Obtener el precio del servicio*************
+                                                    .success(function (resp) {
+                                                        var precio = resp;
+                                                        var objServicio = {
+                                                            "idturno": idturno,
+                                                            "idservicio": idservicio,
+                                                            "dia": dia,
+                                                            "horainicio": horainicio,
+                                                            "horafin": horafin,
+                                                            "nombreservicio": nombreservicio,
+                                                            "precio": precio,
+                                                            "subtotal": precio * cantidad,
+                                                            "cantidad": cantidad
+                                                        };
+                                                        listaTmp.push(objServicio);
+                                                        LlenarGrilla();
+                                                    });
+                                            });
+                                    } else {
+                                        alert('Elemento ya existente');
+                                    }
+                                } else {
+                                    alert("La cantidad supero el stock");
+                                }
+                            });
+                       
+                });
+                });
+                });
+                    e.preventDefault();
+    });
+
+
+    //***************************************************************MOSTRAR LA LISTA DE TURNOS DEL SERVICIO SELECCIONADO**************************************************
+    $("body").on("click", ".mostrarServicio", function (e) {
+        var $this = $(this);
+
+        e.preventDefault();
+        var valor = $this.data("idservicio");
+
+
+        //alert($this.attr("id"));//obtener el atributo id
+
+        $.ajax({ url: "/Admin/BuscarServicio?id=" + valor })
+            .done(function (respuesta) {
+                $("#turnos").html(respuesta);//Mostrar la respuesta obtenida en la etiqueta con id selectCiudades
+            });
+
+        //        $.ajax({ url: "/Admin/ObtenerPrecioServicio?id=" + valor })//*******Obtener el precio
+        //.done(function (resp) {
+        //    alert(resp);
+        //});
+    });
+
+
+
+    //***************************************************************QUITAR UN TURNO DE LA TABLA RESERVAS**************************************************
+    $("#tablaReserva").on("click", ".btnQuitar", function (e) {
+        var $this = $(this);
+
+        e.preventDefault();
+        var idturno = $this.data("idturno");
+        var indice = -1;
+        for (var con = 0; con < listaTmp.length; con++) {
+            objTmp = listaTmp[con];
+            if (objTmp != null) {
+                if (objTmp.idturno == idturno) { indice = con; break; }
+            }
+        }
+
+        if (indice >= 0) {
+            //var precserv = $this.data("precioserv");
+            //total = parseFloat(total) - parseFloat(precserv);
+            //$("#mostTotal").html(`<input type="hidden" value="${total}" name="Total"/><h3>Total : ${total}</h3>`);
+            //$this.parents("tr").remove();
+            listaTmp.splice(indice, 1);
+            LlenarGrilla();
+        } else {
+            alert('No se encontró el elemento');
+        }
+
+
+    });
+
+
+</script>
+<script>
+    //BUSCAR USUARIO
+    $("#btnBuscarCliente").click(function (e) {
+        dni = $("#dniCliente").val();
+        $.ajax({ url: "/Reserva/BuscarUsuario?dni=" + dni })
+        .done(function (respuesta) {
+            if (respuesta != "noexiste") {
+                $("#nombreCliente").val(respuesta);
+            } else {
+                $("#nombreCliente").val("-----------Este cliente no existe... Registre cliente-----------");
+            }
+        });
+        e.preventDefault();
+    });
+
+</script>
+
+
+        
+    
+
+
+<script>
+
+    $("#servicio").change(function () {
+        valor = $("#servicio").val();
+        $.ajax({ url: "/Reserva/ObtenerTurnos?id=" + valor })
+        .done(function (respuesta) {
+            $("#turnos").html(respuesta);
+        });
+    });
+
+
+</script>

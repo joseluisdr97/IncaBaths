@@ -1,0 +1,17 @@
+﻿@{
+    Layout = null;
+}
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>@item.IdReserva</td>
+        <td>@item.Usuario.DNI</td>
+        <td>@item.Fecha</td>
+        <td>@item.Total</td>
+        <td>
+            <a class="btn btn-danger" href="/Reserva/Eliminar?id=@item.IdReserva"><span class="glyphicon glyphicon-trash"></span> Eliminar</a>
+            <a class="mostrarDetalle btn btn-info" data-toggle="modal" data-target="#exampleModal" data-idreserva="@item.IdReserva"><span class="glyphicon glyphicon-eye-open"></span> Ver detalle</a>
+        </td>
+    </tr>
+}

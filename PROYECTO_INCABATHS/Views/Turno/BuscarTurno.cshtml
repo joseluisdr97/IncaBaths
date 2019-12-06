@@ -1,0 +1,19 @@
+﻿
+@{
+    Layout = null;
+}
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>@item.IdTurno</td>
+        <td>@item.Dia</td>
+        <td>@item.HoraInicio</td>
+        <td>@item.HoraFin</td>
+        <td>
+            <a class="btn btn-info" href="/Turno/Editar?id=@item.IdTurno"><span class="glyphicon glyphicon-pencil"></span> Editar</a>
+            <a class="btn btn-danger" href="/Turno/Eliminar?id=@item.IdTurno"><span class="glyphicon glyphicon-trash"></span> Eliminar</a>
+        </td>
+    </tr>
+}
+

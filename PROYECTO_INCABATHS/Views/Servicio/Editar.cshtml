@@ -1,0 +1,47 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading text-center"><h3>Editar servicio</h3></div>
+                <div class="panel-body">
+
+                    <form action="/Servicio/Editar?id=@ViewBag.IdServicio" method="post">
+
+                        <div>
+                            <label class="control-label">Nombre :</label>
+                            <input class="form-control" type="text" name="Nombre" value="@Model.Nombre" />
+                            @Html.ValidationMessage("Nombre")
+                        </div>
+
+                        <div>
+                            <label class="control-label">Precio :</label>
+                            <input class="form-control" type="text" name="Precio" value="@Model.Precio" />
+                            @Html.ValidationMessage("Precio")
+                        </div>
+
+                        <div>
+                            <label class="control-label">Aforo :</label>
+                            <input class="form-control" type="number" name="Aforo" value="@Model.Aforo" />
+                            @Html.ValidationMessage("Aforo")
+                        </div>
+
+                        <br />
+
+                        <button class="btn btn-primary"><span class="glyphicon glyphicon-saved"></span> Guardar</button>
+
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>

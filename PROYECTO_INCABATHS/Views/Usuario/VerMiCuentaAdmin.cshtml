@@ -1,0 +1,39 @@
+﻿
+
+<br />
+<br />
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4"><a class="pull-left btn btn-danger" href="/Admin/Index"><span class="glyphicon glyphicon-circle-arrow-left"></span>Volver</a></div>
+        <div class="col-sm-4">
+            <div class="text-center">
+                <img src="@Model.Perfil" style="width:70px;height:70px" class="img-circle text-center" />
+            </div>
+            <div class="text-center">
+                <label class="control-label text-center">@Model.Correo</label>
+            </div>
+            <div class="text-center">
+                <br />
+                <label class="control-label">Nombre        :      @Model.Nombre    @Model.Apellido </label>
+            </div>
+            <div class="text-center">
+                <br />
+                <label class="control-label">DNI           :      @Model.DNI</label>
+            </div>
+            <div class="text-center">
+                <br />
+                <label class="control-label">Celular       :      @Model.Celular</label>
+            </div>
+            <div class="text-center">
+                <br />
+                <label class="control-label">Direccion     :      @Model.Direccion</label>
+            </div>
+            <div class="text-center">
+                <br />
+                <a href="/Usuario/ActualizarDatosUAdmin">Actualizar datos</a>  |  <a href="/Usuario/CambiarContraUsuarioAdmin">Cambiar contraseña</a>
+            </div>
+        </div>
+        <div class="col-sm-4"></div>
+    </div>
+</div>
+

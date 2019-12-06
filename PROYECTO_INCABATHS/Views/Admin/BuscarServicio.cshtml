@@ -1,0 +1,45 @@
+﻿
+@{
+    Layout = null;
+}
+
+            <h4>Turnos</h4>
+            <div id="precioSev"></div>
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Stock</th>
+                        <th>Dia</th>
+                        <th>Hora de inicio</th>
+                        <th>Hora final</th>
+                        <th>Añadir</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{var index = 0;}
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Stock</td>
+                            <td>@item.Dia</td>
+                            <td>@item.HoraInicio</td>
+                            <td>@item.HoraFin</td>
+                            <td>
+                                <a @*id="@index"*@ 
+                                   data-dia="@item.Dia" 
+                                   data-horainicio="@item.HoraInicio" 
+                                   data-horafin="@item.HoraFin"
+                                   data-idservicio="@item.IdServicio"
+                                   data-idturno="@item.IdTurno"
+                                   class="btnServicioAdd btn btn-danger" href="/ModoPago/Editar?id=@item.IdTurno"><span class="glyphicon glyphicon-shopping-cart"></span> Añadir</a>
+                            </td>
+                        </tr>
+                        index++;
+                    }
+                </tbody>
+            </table>
+ 
+
+
+
+

@@ -1,0 +1,119 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container">
+    <label class="control-label">Ingrese Dia :</label>
+    <div class="row">
+        <form action="/Reserva/Index" method="get">
+            <div class="col-sm-4">
+                <input id="query" class="form-control" type="text" name="query" value="@ViewBag.datos" placeholder="Ingrese DNI" />
+                <input id="reserva" type="hidden" name="id" value="@ViewBag.IdReserva" />
+            </div>
+            <div class="col-sm-2">
+                <button id="btnBuscar" class="btn btn-success"><span class="glyphicon glyphicon-search"></span> Buscar</button>
+            </div>
+        </form>
+        <div class="col-sm-5">
+            <a class="btn btn-primary pull-right" href="/Reserva/Crear"><span class="glyphicon glyphicon-plus"></span> Crear</a>
+        </div>
+        <div class="col-sm-1"></div>
+    </div>
+
+    <br />
+
+    <div class="row">
+        <div class="col-sm-11 text-center">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Usuario</th>
+                        <th>Fecha</th>
+                        <th>Total</th>
+                        <th class="text-center">Opción</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.IdReserva</td>
+                            <td>@item.Usuario.DNI</td>
+                            <td>@item.Fecha</td>
+                            <td>@item.Total</td>
+                            <td>
+                                <a class="btn btn-danger" href="/Reserva/Eliminar?id=@item.IdReserva"><span class="glyphicon glyphicon-trash"></span> Eliminar</a>
+                                <a class="mostrarDetalle btn btn-info" data-toggle="modal" data-target="#exampleModal" data-idreserva="@item.IdReserva"><span class="glyphicon glyphicon-eye-open"></span> Ver detalle</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+    <!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detalle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="bodymodal">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+    $("body").on("click", ".mostrarDetalle", function (e) {
+        var $this = $(this)
+
+        e.preventDefault();
+        var valor = $this.data("idreserva")
+
+        //alert($this.attr("id"));//obtener el atributo id
+
+        $.ajax({ url: "/Reserva/MiDetalleReserva?id=" + valor })
+        .done(function (respuesta) {
+            $("#bodymodal").html(respuesta);//Mostrar la respuesta obtenida en la etiqueta con id selectCiudades
+        });
+    });
+
+
+    //BUSCAR CUANDO DAMOS CLICK
+    $("#btnBuscar").click(function (e) {
+        e.preventDefault();
+        var valor = $("#query").val();
+        $.ajax({ url: "/Reserva/BuscarMisReservasAdmin?dni=" + valor })
+        .success(function (respuesta) {
+            $("#tbody").html(respuesta);
+        });
+    });
+
+    //BUSCAR CUANDO DAMOS ENTER
+    $("#query").keypress(function (e) {
+        var code = (e.keyCode ? e.keyCode : e.which);
+        if (code == 13) {
+            var valor = $("#query").val();
+            $.ajax({ url: "/Reserva/BuscarMisReservasAdmin?dni=" + valor })
+            .success(function (respuesta) {
+                $("#tbody").html(respuesta);
+            });
+        }
+    });
+</script>

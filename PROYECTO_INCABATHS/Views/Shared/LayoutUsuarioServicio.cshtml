@@ -1,0 +1,172 @@
+﻿
+<style>
+    .letra {
+        color: aliceblue;
+        text-decoration: none;
+    }
+</style>
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title>InkaBaths</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+    <script src="js/sweet-alert.min.js"></script>
+    <link rel="stylesheet" href="~/Plantilla/css/sweet-alert.css">
+    <link rel="stylesheet" href="~/Plantilla/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" href="~/Plantilla/css/normalize.css">
+    <link rel="stylesheet" href="~/Plantilla/css/timeline.css">
+    <link rel="stylesheet" href="~/Plantilla/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Plantilla/css/jquery.mCustomScrollbar.css">
+    <link rel="stylesheet" href="~/Plantilla/css/style.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery-1.11.2.min.js"><\/script>')</script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/modernizr.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/sweet-alert.js"></script>
+    <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="~/Scripts/alertify.min.js"></script>
+    <script src="~/Scripts/alertify.js"></script>
+    <link href="~/Scripts/CssAlertify/alertify.css" rel="stylesheet" />
+    <link href="~/Scripts/CssAlertify/alertify.min.css" rel="stylesheet" />
+    <link href="~/Scripts/CssAlertify/alertify.rtl.css" rel="stylesheet" />
+    <link href="~/Scripts/CssAlertify/alertify.rtl.min.css" rel="stylesheet" />
+
+    <link href="~/Scripts/CssAlertify/semantic.rtl.min.css" rel="stylesheet" />
+    <link href="~/Scripts/CssAlertify/semantic.rtl.css" rel="stylesheet" />
+    <link href="~/Scripts/CssAlertify/semantic.min.css" rel="stylesheet" />
+    <link href="~/Scripts/CssAlertify/semantic.css" rel="stylesheet" />
+    <link href="~/Scripts/CssAlertify/default.rtl.css" rel="stylesheet" />
+    <link href="~/Scripts/CssAlertify/default.rtl.min.css" rel="stylesheet" />
+    <link href="~/Scripts/CssAlertify/default.min.css" rel="stylesheet" />
+    <link href="~/Scripts/CssAlertify/default.css" rel="stylesheet" />
+    <link href="~/Scripts/CssAlertify/bootstrap.rtl.min.css" rel="stylesheet" />
+    <link href="~/Scripts/CssAlertify/bootstrap.rtl.css" rel="stylesheet" />
+    <link href="~/Scripts/CssAlertify/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Scripts/CssAlertify/bootstrap.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="navbar-lateral full-reset">
+        <div class="visible-xs font-movile-menu mobile-menu-button"></div>
+        <div class="full-reset container-menu-movile custom-scroll-containers">
+            <div class="logo full-reset all-tittles">
+                <i class="visible-xs zmdi zmdi-close pull-left mobile-menu-button" style="line-height: 55px; cursor: pointer; padding: 0 10px; margin-left: 7px;"></i>
+
+                <figure>
+                    <img src="~/Imagenes/LOGOINCA.png" class="img-responsive center-box" style="width:310px ; height:60px">
+                </figure>
+            </div>
+            <div class="full-reset" style="background-color:indianred; padding-bottom: 10px; color:#fff;">
+
+                <p class="text-center" style="padding-top: 15px;">SERVICIOS</p>
+            </div>
+            <div class="full-reset nav-lateral-list-menu" style="background-color:#2B3D51;padding-bottom: 40px; color:#fff;">
+
+                <ul class="list-unstyled">
+
+
+                    <li><a></a></li>
+
+                    @foreach (var item in ViewBag.Servicios)
+                    {
+
+                        <li><a class="mostrarServicio" href="#" data-idservicio="@item.IdServicio" data-precioser="@item.Precio">@item.Nombre</a></li>
+
+                    }
+
+
+                    <li><a></a></li>
+                    <li><a></a></li>
+                    <li><a></a></li>
+                    <li><a></a></li>
+                    <li><a></a></li>
+                    <li><a></a></li>
+                    <li><a></a></li>
+                    <li><a></a></li>
+                    <li><a></a></li>
+                </ul>
+
+
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <div class="content-page-container full-reset custom-scroll-containers">
+        <nav class="navbar-user-top full-reset">
+
+            <ul class="list-unstyled full-reset">
+                @*<li class="tile-icon tooltips-general exit-system-button" data-href="index.html" data-placement="bottom" title="Salir del sistema">
+                        <i class="zmdi zmdi-power"></i>
+                    </li>*@
+                @if (Session["UsuarioNombre"] != null)
+                {
+                    <li class="dropdown profile_details_drop">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <div class="profile_img">
+                                <span class="prfil-img"><img src="@Session["UsuarioPerfil"]" style="width:50px;height:50px;margin-right:52px" class="img-circle" /></span>
+
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu drp-mnu">
+                            @*<li> <a href="#"><i class="fa fa-cog"></i> Settings</a> </li>*@
+                            <li><a href="/Usuario/VerMiCuenta"><i class="fa fa-user"></i>Cuenta</a></li>
+                            <li> <a href="/Reserva/MisReservas"><i class="fa fa-registered"></i>Mis reservas</a> </li>
+                            <li> <a href="/Auth/Logout"><i class="fa fa-sign-out"></i> Cerrar Sesion</a> </li>
+                        </ul>
+                    </li>
+                    <li> <a href="/Reserva/MisReservas" class="letra">MIS RESERVAS</a> </li>
+                }
+                else
+                {
+                    <li><a href="/Auth/Login" class="letra">INICIAR SESION</a></li>
+                     <li> <a href="/Admin/Crear" class="letra">REGISTRAR</a> </li>
+                }
+               
+                <li><a href="/Admin/Servicio" class="letra">SERVICIOS</a></li>
+                <li style="cursor:default;"> <a href="/Admin/Prueba" class="letra">HOME</a> </li>
+                <li><a></a></li>
+            </ul>
+        </nav>
+
+
+
+        </section>
+
+        <script>
+        var toggle = true;
+        $(".sidebar-icon").click(function () {
+            if (toggle) {
+                $(".page-container").addClass("sidebar-collapsed").removeClass("sidebar-collapsed-back");
+                $("#menu span").css({ "position": "absolute" });
+            }
+            else {
+                $(".page-container").removeClass("sidebar-collapsed").addClass("sidebar-collapsed-back");
+                setTimeout(function () {
+                    $("#menu span").css({ "position": "relative" });
+                }, 400);
+            }
+            toggle = !toggle;
+        });
+        </script>
+        <!--scrolling js-->
+        <script src="~/plantillaAdmin/js/jquery.nicescroll.js"></script>
+        <script src="~/plantillaAdmin/js/scripts.js"></script>
+        <!--//scrolling js-->
+        <script src="~/plantillaAdmin/js/bootstrap.js"></script>
+        <!-- mother grid end here-->
+        @RenderSection("scripts", required: false)
+</body>
+
+@RenderBody()
+</html>
+

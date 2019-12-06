@@ -1,0 +1,308 @@
+﻿
+
+@{
+    Layout = "~/Views/Shared/LayoutUsuarioServicio.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+
+        <div class="col-sm-6">
+            <div id="turnos">
+                <br />
+                <div class="row">
+
+                    <div class="col-sm-8 col-md-6">
+                        <div class="thumbnail">
+                            <img src="~/Imagenes/sauna.jpg" alt="img" style="width:250px" ;height="180px">
+                            <div class="caption">
+                                <h3>Sauna</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-8 col-md-6">
+                        <div class="thumbnail">
+                            <img src="~/Imagenes/piscina Terminal.jpg" alt="img" style="width:250px";height="180px">
+                            <div class="caption">
+                                <h3>Piscina</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+
+                    <div class="col-sm-8 col-md-6">
+                        <div class="thumbnail">
+                            <img src="~/Imagenes/NinacYaku.PNG" alt="img" style="width:250px" ;height="180px">
+                            <div class="caption">
+                                <h3>Pozas</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-8 col-md-6">
+                        <div class="thumbnail">
+                            <img src="~/Imagenes/hidromasaje1.JPG" alt="img" style="width:250px" ;height="180px">
+                            <div class="caption">
+                                <h3>Hidromasajes</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div id="formulario" class="container col-sm-5 text-center">
+            <br />
+            <div class="row">
+
+                <div class="col-sm-9 col-md-7">
+                    <div class="thumbnail">
+                        <img src="~/Imagenes/masajes.PNG" alt="img" style="width:250px" ;height="180px">
+                        <div class="caption">
+                            <h3>Masajes</h3>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="row">
+
+                <div class="col-sm-9 col-md-7">
+                    <div class="thumbnail">
+                        <img src="~/Imagenes/visita.png" alt="img" style="width:250px" ;height="180px">
+                        <div class="caption">
+                            <h3>Visita</h3>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+
+    //***************************************************************AGREGAR UN TURNO A LA RESERVA**************************************************
+    var listaTmp = [];
+    var objTmp = {};
+
+    function GetURLParameter(sParam) {//OBTENER LA URL
+        var sPageURL = window.location.search.substring(1);
+        var sURLVariables = sPageURL.split('&');
+        for (var i = 0; i < sURLVariables.length; i++) {
+            var sParameterName = sURLVariables[i].split('=');
+            if (sParameterName[0] == sParam) {
+                return sParameterName[1];
+            }
+        }
+        return null;
+    }
+    $().ready(function () {//PARA LA ALERTA CUANDO TRAE UN ATRIBUTO POR LA URL
+        var msg = GetURLParameter('msg');
+        if (msg != undefined && msg != null && msg == 1) {
+            alert('Registro exitoso');
+        }
+    });
+
+    function LlenarGrilla() {
+        var total = 0;
+        $("#tbody").empty();
+        for (var index = 0; index < listaTmp.length; index++) {
+            objTmp = listaTmp[index];
+
+            //Añadir una fila a mi tabla reserva
+            $("#tbody").append(`<tr>
+                    <td><input type="hidden" value="${objTmp.idservicio}" name="DetalleReservas[${index}].IdServicio" /><h5>${objTmp.nombreservicio}</h5></td>
+                    <td><input type="hidden" value="${objTmp.dia}"  name="DetalleReservas[${index}].Dia"/> <h5>${objTmp.dia}</h5></td>
+                    <td><input type="hidden" value="${objTmp.horainicio}" name="DetalleReservas[${index}].HoraInicio"/> <h5>${objTmp.horainicio}</h5></td>
+                    <td><input type="hidden" value="${objTmp.horafin}" name="DetalleReservas[${index}].HoraFin"/> <h5>${objTmp.horafin}</h5></td>
+                     <td><h5>${objTmp.precio}</h5></td>
+                     <td><input type="hidden" value="${objTmp.cantidad}"  type="hidden"name="DetalleReservas[${index}].Cantidad" /><h5>${objTmp.cantidad}</h5></td>
+                     <td><input type="hidden" value="${objTmp.fecha}"  type="hidden"name="DetalleReservas[${index}].Fecha" /><h5>${objTmp.fecha}</h5></td>
+                    <td><input type="hidden" type="text" value="${objTmp.subtotal}" name="DetalleReservas[${index}].SubTotal"/><h5>${objTmp.subtotal}</h5></td>
+                    <td><input type="hidden" value="${objTmp.idturno}"  type="hidden"name="DetalleReservas[${index}].IdTurno" /></td>
+                    <td><a class ="btnQuitar btn btn-danger pull-left" href="#" data-idturno="${objTmp.idturno}" data-precioserv="${objTmp.precio}"><span class ="glyphicon glyphicon-trash"></a></td>
+                </tr>`);//Agregar mi fila a la tabla
+            total = parseFloat(total) + parseFloat(objTmp.subtotal);
+        }
+        $("#mostTotal").html(`<input type="hidden" value="${total}" name="Total"/><h3>Total S/. ${total}</h3>`);
+    }
+
+
+
+    $("body").on("click", ".btnServicioAdd", function (e) {
+        var $this = $(this);
+        $.ajax({ url: "/Auth/ObtenerUsuario"})
+            .success(function (respU) {
+
+                if (respU == 1) {
+
+                    var dia = $this.data("dia");
+                    var horainicio = $this.data("horainicio");
+                    var horafin = $this.data("horafin");
+                    var idservicio = $this.data("idservicio");
+                    var idturno = $this.data("idturno");
+                    var paso = 1;
+                    var cantidad = prompt("Ingrese cantidad", "1");
+                    var fecha = prompt("Ingrese fecha", "//");
+                    if (cantidad != null && cantidad != "") {
+                        
+                        //alert($this.attr("id"));//obtener el atributo id
+                        $.ajax({ url: "/Admin/ObtenerStock?id=" + idturno })//*******Obtener el nombre del servicio*************
+                            .success(function (respStock) {
+                                
+                                if (respStock-cantidad>=0) {
+
+
+                                    if (listaTmp.length > 0) {
+                                        for (var con = 0; con < listaTmp.length; con++) {
+                                            objTmp = listaTmp[con];
+                                            if (objTmp != null) {
+                                                if (objTmp.idturno == idturno)
+                                                { paso = 0; break; }
+                                            }
+                                        }
+                                    }
+
+                                    if (paso == 1) {
+                                        $.ajax({ url: "/Admin/ObtenerNombreServicio?id=" + idservicio })//*******Obtener el nombre del servicio*************
+                                            .success(function (respNom) {
+                                                var nombreservicio = respNom;
+                                                $.ajax({ url: "/Admin/ObtenerPrecioServicio?id=" + idservicio })//*******Obtener el precio del servicio*************
+                                                    .success(function (resp) {
+                                                        var precio = resp;
+                                                        var objServicio = {
+                                                            "idturno": idturno,
+                                                            "idservicio": idservicio,
+                                                            "dia": dia,
+                                                            "horainicio": horainicio,
+                                                            "horafin": horafin,
+                                                            "nombreservicio": nombreservicio,
+                                                            "precio": precio,
+                                                            "subtotal": precio * cantidad,
+                                                            "cantidad": cantidad,
+                                                            "fecha":fecha
+                                                        };
+                                                        listaTmp.push(objServicio);
+                                                        LlenarGrilla();
+
+                                                        var mostbotonreserva = 0;
+                                                        if (mostbotonreserva == 0) {
+                                                            $("#mostrarbotonReserva").html(`<button class ="btn btn-success">Reservar</button>`);
+                                                            mostbotonreserva++;
+                                                        }
+
+                                                    });
+                                            });
+                                     
+                                    } else {
+                                        alert('Elemento ya existente');
+                                    }
+                                } else {
+                                    alertify.alert("La cantidad supero el stock");
+                                }
+                            });
+                                } else {
+
+                        alertify.alert("Asegurese ingresar un numero");
+                                }
+                } else {
+                    alertify.alert("Para realizar una reserva asegurese de haber iniciado sesion");
+                }
+            });
+        e.preventDefault();
+    });
+
+
+    //***************************************************************MOSTRAR LA LISTA DE TURNOS DEL SERVICIO SELECCIONADO**************************************************
+    $("body").on("click", ".mostrarServicio", function (e) {
+        var $this = $(this);
+        e.preventDefault();
+        var valor = $this.data("idservicio");
+        var precios = $this.data("precioser");
+        //alert($this.attr("id"));//obtener el atributo id
+
+
+        $.ajax({ url: "/Admin/BuscarServicio?id=" + valor })
+            .done(function (respuesta) {
+                $("#turnos").html(respuesta);//Mostrar la respuesta obtenida en la etiqueta con id selectCiudades
+                $("#precioSev").html(`<h4>  Precio : ${precios}</h4>`)
+            });
+
+       
+        var index = 0;
+        if (index == 0) {
+            $("#formulario").html(`
+                    <form action="/Reserva/Crear" method="post">
+    <label class ="control-label text-center">Reserva</label>
+    <table id="tablaReserva" class ="table table-condensed">
+        <thead>
+            <tr>
+                <th class ="text-center">Servicio</th>
+                <th class ="text-center">Dia</th>
+                <th class ="text-center">Hora Ingreso</th>
+                <th class ="text-center">Hora Salida</th>
+                <th class ="text-center">S/.</th>
+                <th class ="text-center">Cant.</th>
+                <th class ="text-center">Sub Total</th>
+            </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+    </table>
+    <div id="mostTotal">
+        <label>Total S/ 0</label>
+
+    </div>
+    <div id="mostrarbotonReserva"></div>
+</form>`);
+            index++;
+        }
+    });
+
+
+
+    //***************************************************************QUITAR UN TURNO DE LA TABLA RESERVAS**************************************************
+    $("#tablaReserva").on("click", ".btnQuitar", function (e) {
+        var $this = $(this);
+
+        e.preventDefault();
+        var idturno = $this.data("idturno");
+        var indice = -1;
+        for (var con = 0; con < listaTmp.length; con++) {
+            objTmp = listaTmp[con];
+            if (objTmp != null) {
+                if (objTmp.idturno == idturno) { indice = con; break; }
+            }
+        }
+
+        if (indice >= 0) {
+            //var precserv = $this.data("precioserv");
+            //total = parseFloat(total) - parseFloat(precserv);
+            //$("#mostTotal").html(`<input type="hidden" value="${total}" name="Total"/><h3>Total : ${total}</h3>`);
+            //$this.parents("tr").remove();
+            listaTmp.splice(indice, 1);
+            LlenarGrilla();
+        } else {
+            alert('No se encontró el elemento');
+        }
+
+
+    });
+
+
+</script>
+<script>
+    $("#LiAdmSer").addClass("active");
+</script>

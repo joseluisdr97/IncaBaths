@@ -1,0 +1,35 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading text-center"><h3>Crear modo de pago</h3></div>
+                <div class="panel-body">
+
+                    <form action="/ModoPago/Crear" method="post">
+
+                        <div>
+                            <label class="control-label">Nombre :</label>
+                            <input class="form-control" type="text" name="Nombre" value="@Model.Nombre" />
+                            @Html.ValidationMessage("Nombre")
+                        </div>
+
+                        <br />
+
+                        <button class="btn btn-primary"><span class="glyphicon glyphicon-saved"></span> Guardar</button>
+
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>

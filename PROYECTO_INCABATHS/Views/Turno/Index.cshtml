@@ -1,0 +1,96 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Lista de Turnos</h2>
+
+<div class="container">
+    <label class="control-label">Ingrese Dia :</label>
+    <div class="row">
+        <form action="/Turno/Index" method="get">
+            <div class="col-sm-4">
+                <input id="query" class="form-control" type="text" name="query" value="@ViewBag.datos" placeholder="Ingrese dia" />
+                <input id="servicio" type="hidden" name="id" value="@ViewBag.IdServicio" />
+            </div>
+            <div class="col-sm-2">
+                <button id="btnBuscar" class="btn btn-success"><span class="glyphicon glyphicon-search"></span> Buscar</button>
+            </div>
+        </form>
+        <div class="col-sm-5">
+            <a class="btn btn-primary pull-right" href="/Turno/Crear?id=@ViewBag.IdServicio"><span class="glyphicon glyphicon-plus"></span> Crear</a>
+        </div>
+        <div class="col-sm-1"></div>
+    </div>
+
+    <br />
+
+    <div class="row">
+        <div class="col-sm-11 text-center">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Dia</th>
+                        <th>Hora de ingreso</th>
+                        <th>Hora de salida</th>
+                        <th>Lugares Disponibles</th>
+                        <th class="text-center">Opción</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.IdTurno</td>
+                            <td>@item.Dia</td>
+                            <td>@item.HoraInicio</td>
+                            <td>@item.HoraFin</td>
+                            <td>@item.Stock</td>
+                            <td>
+                                <a class="btn btn-info" href="/Turno/Editar?id=@item.IdTurno"><span class="glyphicon glyphicon-pencil"></span> Editar</a>
+                                <a class="btn btn-danger" href="/Turno/Eliminar?id=@item.IdTurno"><span class="glyphicon glyphicon-trash"></span> Eliminar</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    @*$("#query").keyup(function () {
+
+        var valor = $("#query").val();
+        $.ajax({ url: "/Turno/BuscarTurno?query="+valor+"&&id=@ViewBag.IdServicio" })
+        .success(function (respuesta) {
+            $("#tbody").html(respuesta);
+        });
+    });*@
+
+    //BUSCAR CUANDO DAMOS CLICK
+    $("#btnBuscar").click(function (e) {
+        e.preventDefault();
+        var valor = $("#query").val();
+        $.ajax({ url: "/Turno/BuscarTurno?query=" + valor + "&&id=@ViewBag.IdServicio" })
+        .success(function (respuesta) {
+            $("#tbody").html(respuesta);
+        });
+    });
+
+    //BUSCAR CUANDO DAMOS ENTER
+    $("#query").keypress(function (e) {
+        var code = (e.keyCode ? e.keyCode : e.which);
+        if (code == 13) {
+            var valor = $("#query").val();
+            $.ajax({ url: "/Turno/BuscarTurno?query=" + valor + "&&id=@ViewBag.IdServicio" })
+            .success(function (respuesta) {
+                $("#tbody").html(respuesta);
+            });
+        }
+    });
+
+</script>

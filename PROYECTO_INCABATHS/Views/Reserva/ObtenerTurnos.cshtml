@@ -1,0 +1,20 @@
+﻿
+@{
+    Layout = null;
+}
+
+<div>
+    <label class="control-label">TURNOS</label>
+
+    <select id="turno" class="form-control" name="IdTurno">
+        <option value="0">--------Seleccione turno---------</option>
+        @foreach (var item in Model)
+            {
+            <option value="@item.IdTurno">@item.Dia  @item.HoraInicio @item.HoraFin @item.Stock</option>
+        }
+
+    </select>
+</div>
+
+
+

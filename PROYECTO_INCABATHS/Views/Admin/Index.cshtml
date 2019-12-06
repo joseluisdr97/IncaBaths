@@ -1,0 +1,44 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2 class="text-center">Ganancias del día</h2>
+
+<h3 class="text-center">Ganancias = S/. @ViewBag.GanaciasDelDia</h3>
+<hr />
+
+
+<h2 class="text-center">Ganancia por fecha</h2>
+<div class="row">
+    <div class="col-md-3">
+        <label class="control-label">Desde : </label>
+        <input class="form-control" type="date" id="desde" />
+    </div>
+    <div class="col-md-3">
+        <label class="control-label">Hasta : </label>
+        <input class="form-control" type="date" id="hasta" />
+    </div>
+    <div class="col-md-1">
+        <br />
+        <button id="btnBuscar" class="btn btn-primary">Buscar</button>
+    </div>
+    <div class="col-md-4">
+        <br />
+        <div id="mostrarGanancia">
+            <h3> Ganancias = S/. 0.0   </h3>
+        </div>
+    </div>
+</div>
+<script>
+    //BUSCAR CUANDO DAMOS CLICK
+    $("#btnBuscar").click(function (e) {
+        e.preventDefault();
+        var valor = $("#desde").val(), valor2 = $("#hasta").val();
+
+        $.ajax({ url: "/Reserva/CalcularGanancia?desde=" + valor + "&&hasta="+ valor2 })
+        .success(function (respuesta) {
+            $("#mostrarGanancia").html("<h3> Ganancias = S/. "+ respuesta +"</h3>");
+        });
+    });
+
+</script>

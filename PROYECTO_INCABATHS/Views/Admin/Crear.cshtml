@@ -1,0 +1,136 @@
+﻿
+@{
+    Layout = "~/Views/Shared/LayoutUsuarioCliente.cshtml";
+}
+
+
+<br />
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+            <div class="row">
+                <form action="/Admin/Crear" method="post" enctype="multipart/form-data">
+
+                    <div class="panel panel-primary">
+                        <div class="panel-heading text-center"><h3>Registrarse</h3></div>
+                        <div class="panel-body">
+                            <div class="col-sm-4">
+                                <div>
+                                    <label class="control-label">Perfil</label>
+                                    <input id="archivoInput" class="form-control" type="file" name="file" onchange="return validarExt()">
+
+                                    @Html.ValidationMessage("Perfil")
+                                    <div id="visorArchivo" style="animation-duration ">
+
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="control-label">Nombre :</label>
+                                    <input class="form-control" type="text" name="Nombre" value="@Model.Nombre" />
+                                    @Html.ValidationMessage("Nombre")
+                                </div>
+
+                                <div>
+                                    <label class="control-label">Apellido :</label>
+                                    <input class="form-control" type="text" name="Apellido" value="@Model.Apellido" />
+                                    @Html.ValidationMessage("Apellido")
+                                </div>
+
+
+
+
+                            </div>
+                            <div class="col-sm-4">
+                                <div>
+                                    <label class="control-label">DNI :</label>
+                                    <input class="form-control" type="text" name="DNI" value="@Model.DNI" />
+                                    @Html.ValidationMessage("DNI")
+                                </div>
+                                <div>
+                                    <label class="control-label">Celular :</label>
+                                    <input class="form-control" min="9" type="text" pattern="^[9|8|7|6]\d{8}$" title="Debe empezar con 9" name="Celular" value="@Model.Celular" />
+                                    @Html.ValidationMessage("Celular")
+                                </div>
+                                <div>
+                                    <label class="control-label">Direccion :</label>
+                                    <input class="form-control" type="text" name="Direccion" value="@Model.Direccion" />
+                                    @Html.ValidationMessage("Direccion")
+                                </div>
+
+
+                            </div>
+                            <div class="col-sm-4">
+                                <div>
+                                    <label class="control-label">Correo :</label>
+                                    <input class="form-control" type="email" name="Correo" value="@Model.Correo" />
+                                    @Html.ValidationMessage("Correo")
+                                </div>
+
+                                <div>
+                                    <label class="control-label">Password :</label>
+                                    <input class="form-control" type="password" name="Password" value="@Model.Password" />
+                                    @Html.ValidationMessage("Password")
+                                </div>
+
+                                <div>
+                                    <label class="control-label">Repita password :</label>
+                                    <input class="form-control" type="password" name="RepitaPassword" />
+                                    @Html.ValidationMessage("RepitaPassword")
+                                </div>
+                                <br />
+                            </div>
+                            <div class="panel-body">
+                                <button class="btn btn-primary pull-right"><span class="glyphicon glyphicon-saved"></span> Guardar</button>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+        <div class="col-sm-2"></div>
+    </div>
+</div>
+</div>
+
+
+
+<script>
+            $("#LiAdmReg").addClass("active");
+</script>
+<script type="text/javascript">
+
+function validarExt()
+{
+    var archivoInput = document.getElementById('archivoInput');
+    var archivoRuta = archivoInput.value;
+    var extPermitidas = /(.jpg|.png)$/i;
+    if(!extPermitidas.exec(archivoRuta)){
+        alert('Asegurese de haber seleccionado una imagen');
+        archivoInput.value = '';
+        return false;
+    }
+
+    else
+    {
+        //PRevio del PDF
+        if (archivoInput.files && archivoInput.files[0])
+        {
+            var visor = new FileReader();
+            visor.onload = function(e)
+            {
+                document.getElementById('visorArchivo').innerHTML =
+                '<img src="' + e.target.result + '" style="width:100px;height:100px" class="img-circle" />';
+            };
+            visor.readAsDataURL(archivoInput.files[0]);
+        }
+    }
+}
+</script>

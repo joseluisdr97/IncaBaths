@@ -1,0 +1,102 @@
+﻿@{
+    Layout = "~/Views/Shared/LayoutUsuarioCliente.cshtml";
+}
+
+<br />
+<br />
+<br />
+<br />
+
+
+<title>Inicio de sesión</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="Shortcut Icon" type="image/x-icon" href="assets/icons/book.ico" />
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script src="js/sweet-alert.min.js"></script>
+<link rel="stylesheet" href="~/Plantilla/css/sweet-alert.css" />
+
+<link rel="stylesheet" href="~/Plantilla/css/jquery.mCustomScrollbar.css" />
+<link rel="stylesheet" href="~/Plantilla/css/style.css" />
+<link rel="stylesheet" href="~/Plantilla/css/login.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+
+
+
+<div class="container">
+    <div class="form-container">
+        <p class="text-center" style="margin-top: 17px;">
+            <i class="zmdi zmdi-account-circle zmdi-hc-5x"></i>
+        </p>
+        <h4 class="text-center all-tittles" style="margin-bottom: 30px;">inicia sesión</h4>
+        <form action="/Auth/Login" method="post">
+            <div class="group-material-login">
+                <input type="text" class="material-login-control" required="" name="Correo" autocomplete="off">
+                <span class="highlight-login"></span>
+                <span class="bar-login"></span>
+                <label><i class="zmdi zmdi-account"></i> &nbsp; Correo</label>
+            </div><br>
+            <div class="group-material-login">
+                <input type="password" class="material-login-control" required="" name="PassWord">
+                <span class="highlight-login"></span>
+                <span class="bar-login"></span>
+                <label><i class="zmdi zmdi-lock"></i> &nbsp; Contraseña</label>
+            </div>
+            <div class="group-material">
+                <button type="button" style="background-color: rgba(0,0,0,0); border: 0px none;" data-toggle="modal" data-target="#myModal">Olvide mi contraseña</button>
+                <h5><a href="/Admin/Crear">¿no tengo cuenta?</a></h5>
+                @*<label>&nbsp; <a class="lanzaModal" href="#"></a></label>*@
+            </div>
+            <button class="btn-login" type="submit">Ingresar al sistema &nbsp; <i class="zmdi zmdi-arrow-right"></i></button>
+            <p>@ViewBag.Validation</p>
+        </form>
+
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content" style="background-color: rgba(50,64,77,1); color: white;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Recuperar Contraseña</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-8">
+                            <input type="text" id="txtCorreo" class="material-login-control" required="" name="Correo" autocomplete="off">
+                            <span class="highlight-login"></span>
+                            <span class="bar-login"></span>
+                            <label><i class="zmdi zmdi-account"></i> &nbsp; Correo</label>
+                        </div>
+                        <div class="col-md-2"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnSend" type="button" class="btn btn-default">Enviar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#btnSend").click(function (e) {
+        e.preventDefault();
+        var url = "@Url.Action("RecuperarContrasenha", "Auth")";
+        var correo = $("#txtCorreo").val();
+        var data = { correo: correo }
+
+        $.get(url, data).done(function (data) {
+            alert(data);
+        });
+    });
+
+</script>
+
